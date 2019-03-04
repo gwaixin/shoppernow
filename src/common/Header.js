@@ -6,7 +6,8 @@ import {
 	Col,
 	Navbar,
 	Nav,
-	NavDropdown
+	NavDropdown,
+	Image
 } from 'react-bootstrap';
 
 class Header extends React.Component {
@@ -16,7 +17,9 @@ class Header extends React.Component {
 				<Container>
 					<Row className="pt-3">
 						<Col>
-							<Link to="/"><h1>SHOPPERNOW</h1></Link>
+							<Link to="/">
+								<Image src="/images/tshirtshop.png" fluid />
+							</Link>
 						</Col>
 
 						<Col>

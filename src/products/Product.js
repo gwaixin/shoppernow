@@ -1,29 +1,43 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col, Card } from 'react-bootstrap'
+import Price from '../component/Price'
+import slugify from 'slugify'
 
 
-class Product extends React.Component {
-	render() {
-		return(
-			<Card className="product-item">
-				<Card.Img variant="top" src="//placehold.it/671x480" />
-				<div className="p-1">
-					<div class="price mb-1">
-						<strong>₱15,500.00</strong> <br/>
-						<small class="text-muted"><s>₱19,000.00</s> -18%</small>
+const Product = (props) => {
+
+	let prod = props.product
+	let slug = slugify(prod.name, { remove: /[*+~.()'"!:@]/g, lower: true })
+	let url = "/product/"+ prod.product_id + "/" + slug
+	let discount = prod.discounted_price > 0 ? 
+		<small className="text-muted">
+			<s><Price value={ prod.discounted_price } /></s> -18%
+		</small> : <br />
+
+
+	return(
+		<Link className="product-item" to={url}>
+			<Card>
+				<Card.Img variant="top" src={`/images/products/${prod.image}`} />
+				<Card.Body className="p-2">
+					<div className="price mb-1">
+						<strong>
+							<Price value={ prod.price } />
+						</strong> <br/>
+						{ discount }
 					</div>
 				
-					<Link to="/product/12312/quality-affordable-assus-computer-set">QUALITY AND AFFORDABLE ASUS COMPUTER SET 19" wide A4 6300</Link>
+					<span className="product-name">{ prod.name }</span>
+					<p className="text-muted">{ prod.description.substring(0, 50) + '...' }</p>
 					<Row className="adon">
 						<Col>Regional</Col>
 						<Col className="text-right">French</Col>
 					</Row>
-				</div>
-
+				</Card.Body>
 			</Card>
-		)
-	}
+		</Link>
+	)
 }
 
 export default Product

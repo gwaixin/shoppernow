@@ -1,6 +1,5 @@
 .products { font-size: 12px; }
-.products .product-item {
-	border: 1px solid green;
-}
-.products .product-item .figure { margin: 0; }
+.products .product-item:hover { text-decoration: none; }
+.products .product-item .price { font-size: 20px; }
 .products .product-item .adon { margin-top: 15px; font-size: 10px; }
+.products .product-name { font-size: 18px; }

@@ -42,13 +42,13 @@ const Routes = props => {
   return (
   	<Router>
 			<Switch>
-	  		<App>
-	  			<Route exact={true} path="/" component={Products} />
-	  			<Route path="/product/:id/:slug" component={Product} />
-	  			<Route path="/cart" component={Cart} />
-	  			<Route path="/signin" component={Signin} />
-	  			<Route path="/signup" component={Signup} />
-	  			<Route path="/signout" component={Signout} />
+	  			<App>
+					<Route key="home" exact={true} path="/" component={Products} />
+					<Route key="product" path="/product/:id/:slug" component={Product} />
+					<Route key="cart" path="/cart" component={Cart} />
+					<Route key="signin" path="/signin" component={Signin} />
+					<Route key="signup" path="/signup" component={Signup} />
+					<Route key="signout" path="/signout" component={Signout} />
 				</App>
 			</Switch>
 		</Router>

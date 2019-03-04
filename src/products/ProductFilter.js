@@ -11,7 +11,8 @@ class ProductFilter extends React.Component {
 						{['Regional', 'Nature', 'Seasonal'].map(type => (
 							<Form.Check 
 				        custom
-				        type="checkbox"
+								type="checkbox"
+								key={`d-${type}`}
 								id={`custom-${type}`}
 				        label={type}
 				      />
@@ -25,7 +26,8 @@ class ProductFilter extends React.Component {
 						{['French', 'Italian', 'Irish', 'Animal'].map(type => (
 							<Form.Check 
 				        custom
-				        type="checkbox"
+								type="checkbox"
+								key={`c-${type}`}
 								id={`custom-${type}`}
 				        label={type}
 				      />
