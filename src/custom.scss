@@ -1,6 +1,8 @@
 // Override default variables before the import
 $body-bg: #f8f9fa;
-$primary: #8aa9e4;
+$body-color: #010302;
+$primary: #0590c7;
+$secondary: #2a8ea6;
 
 
 // Import Bootstrap and its default variables
@@ -9,3 +11,34 @@ $primary: #8aa9e4;
 
 // Import assets
 @import './assets/css/loading.scss';
+
+
+// custom style
+.text-strike { text-decoration: line-through; }
+.full-width { width: 100%; }
+.fading-appear {
+    opacity: 0.01;
+}
+  
+.fading-appear.fading-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
+.fading-enter {
+    opacity: 0.01;
+}
+
+.fading-enter.fading-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+.fading-leave {
+    opacity: 0;
+    transition-delay: 0s!important;
+}
+
+.fading-leave.fading-leave-active {
+    opacity: 0.01;
+    transition: opacity 50ms ease-in;
+}

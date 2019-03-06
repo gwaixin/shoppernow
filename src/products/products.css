@@ -1,5 +1,17 @@
-.products { font-size: 12px; }
-.products .product-item:hover { text-decoration: none; }
+.products { font-size: 12px; display: flex; flex-flow: row wrap;
+  
+	/* Then we define how is distributed the remaining space */
+	justify-content: space-around; }
+.products .product-item { 
+	float: left;
+	width: 200px;
+	height: auto;
+	margin: auto;
+	margin-bottom: 20px;
+	align-self: stretch;
+	
+}
+.products .product-item a:hover { text-decoration: none; }
 .products .product-item .price { font-size: 20px; }
 .products .product-item .adon { margin-top: 15px; font-size: 10px; }
 .products .product-name { font-size: 18px; }
