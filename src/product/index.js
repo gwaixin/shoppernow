@@ -38,13 +38,13 @@ class Index extends React.Component {
 						<Col md={12}>
 							<h1 className="mt-3 mb-3">{ this.state.product.name }</h1>
 						</Col>
-						<Col md={3}>
+						<Col md={2}>
 							<img src={`/images/products/${this.state.product.image}`} alt="" className="img-fluid" />
 						</Col>
 						<Col md={6}>
 							<Detail product={ this.state.product } />
 						</Col>
-						<Col md={3}>
+						<Col md={4}>
 							<AddToCart product={ this.state.product } />
 						</Col>
 					</Row>

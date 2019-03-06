@@ -1,17 +1,16 @@
 import React from 'react'
 import axios from 'axios'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { Container, Row, Col } from 'react-bootstrap'
 import ProductSearch from './ProductSearch'
 import ProductFilter from './ProductFilter'
-import Product from './Product'
+import ProductList from './ProductList'
 import Paginator from '../component/Paginator'
 import './products.css'
 
 class Index extends React.Component {
 
 	state = {
-		products: [],
+		products: null,
 		limit: 12,
 		keywords: '',
 		page: 1,
@@ -61,7 +60,7 @@ class Index extends React.Component {
 	}
 
 	onUpdateWithFilters(filterCategories) {
-		this.setState({ filterCategories }, () => {
+		this.setState({ filterCategories, page: 1 }, () => {
 			this.updatePage()
 		})
 	}
@@ -73,35 +72,13 @@ class Index extends React.Component {
 				<Container>
         			<Row>
 						<Col md={12} className="mb-3 mt-3">
-							<h3>Trending products now</h3>
+							<h3><i className="fas fa-bullseye"></i> Trending Products Now</h3>
 						</Col>
 
 						{/* Product List */}
 						<Col md={9}>
-							<ReactCSSTransitionGroup 
-								transitionName="fading"
-								transitionLeaveTimeout={300}
-								transitionEnterTimeout={300}
-								className="products">
-								
-								{
-									this.state.products.length > 0 ? 
-										(
-											this.state.products.map((prod, i) => {
-												return(
-													<div className="product-item" 
-														key={`product-${prod.product_id}`}
-														style={{"transitionDelay": `${ i * .06 }s` }}>
-														
-														<Product product={prod} />
-														
-													</div>
-												)
-											})
-										)
-									: <h5 className="text-danger mt-5 full-width">No product found.</h5>
-								}
-							</ReactCSSTransitionGroup>
+
+							<ProductList products={this.state.products} />
 							
 							<div>
 								<Paginator 

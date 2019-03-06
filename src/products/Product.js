@@ -9,25 +9,30 @@ const Product = (props) => {
 	let prod = props.product
 	let url = "/product/"+ prod.product_id + "/" + prod.slug
 
+	let specialitem = Math.random() >= 0.9 ? 'product-item special' : 'product-item'
 
 	return(
-		<Link className="product-item"  to={url}>
+		<Link className={specialitem}  to={url}>
 			<Card>
 				<Card.Img variant="top" src={`/images/products/${prod.image}`} />
 				<Card.Body className="p-2">
 					<div className="price mb-1">
-						<strong>
-							<Price value={ prod.price } />
-						</strong> <br/>
+						<div>
+							<strong>
+								<Price value={ prod.price } />
+							</strong> 
+						</div>
 						<small className="text-muted"><Price value={ prod.discounted_price } isDiscount={true} /></small>
 					</div>
 				
 					<span className="product-name">{ prod.name }</span>
-					<p className="text-muted">{ prod.description.substring(0, 50) + '...' }</p>
-					<Row className="adon">
-						<Col>{ prod.category.department.name }</Col>
-						<Col className="text-right">{ prod.category.name }</Col>
-					</Row>
+					<div className="product-info">
+						<p className="text-muted">{ prod.description.substring(0, 50) + '...' }</p>
+						<Row className="adon">
+							<Col> { prod.category.department.name }</Col>
+							<Col className="text-right">{ prod.category.name }</Col>
+						</Row>
+					</div>
 				</Card.Body>
 			</Card>
 		</Link>

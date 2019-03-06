@@ -131,7 +131,7 @@ class ProductFilter extends React.Component {
 		return (
 			<div>
 				<div className="mt-3">
-					<h5>Department</h5>
+					<h5>Department </h5>
 					<Form>
 						{this.state.departments.map(dept => (
 							<Form.Check 

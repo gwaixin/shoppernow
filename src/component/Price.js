@@ -21,7 +21,7 @@ const Price = (props) => {
             </span>
         )
     } else {
-        return (<br/>)
+        return null
     }
 }
 

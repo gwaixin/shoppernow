@@ -2,10 +2,21 @@ import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
 class Loading extends React.Component {
+
+	state = {
+		align: 'justify-content-md-center text-center'
+	}
+
+	componentDidMount() {
+		if (this.props.align) {
+			this.setState({ align: this.props.align })
+		}
+	}
+
 	render() {
 		return(
 			<Container>
-				<Row className="justify-content-md-center text-center mt-5">
+				<Row className={`mt-5 ${this.state.align}`}>
 					<Col md={5}>
 						<div className="double">
 							<span className="ouro">
