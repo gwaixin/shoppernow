@@ -1,0 +1,17 @@
+.relateds { font-size: 12px; justify-content: space-around; }
+.relateds .related-item { float: left; width: 175px; margin: 5px; }
+.relateds .related-item:hover { text-decoration: none; }
+.relateds .related-item .name { font-size: 18px; }
+.relateds .related-item .price { font-size: 20px; color: #444; }
+
+.product-detail { min-height: 260px;}
+.product-detail .attributes { font-size: 12px; }
+.product-detail .colorbox { padding: 0px; display: inline-block; margin-bottom: 0px; }
+.product-detail .colorbox .colorbox-item { 
+    width: 25px;
+    height: 25px;
+    float: left;
+    list-style-type: none;
+    border: 1px solid #eee;
+    -webkit-filter: saturate(0.7); filter: saturate(0.7);
+}

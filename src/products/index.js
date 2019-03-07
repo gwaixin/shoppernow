@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Card } from 'react-bootstrap'
 import ProductSearch from './ProductSearch'
 import ProductFilter from './ProductFilter'
 import ProductList from './ProductList'
@@ -90,12 +90,16 @@ class Index extends React.Component {
 
 						{/* Product search */}
 						<Col md={3}>
-							<div className="sticky-top">
-								<ProductSearch onSearch={this.onSearch.bind(this)} />
-								<ProductFilter 
-									onUpdate={ this.onUpdateWithFilters.bind(this) } 
-									/>
-							</div>
+							<Card className="sticky-top pb-5">
+								<Card.Body>
+									<div>
+										<ProductSearch onSearch={this.onSearch.bind(this)} />
+										<ProductFilter 
+											onUpdate={ this.onUpdateWithFilters.bind(this) } 
+											/>
+									</div>
+								</Card.Body>
+							</Card>
 						</Col>
 					</Row>
 				</Container>

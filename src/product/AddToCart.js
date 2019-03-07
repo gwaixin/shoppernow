@@ -8,10 +8,11 @@ const AddToCart = (props) => {
 
 
 	return(
-		<div className="text-right">
-			<h3 className="text-danger"><Price value={ prod.price } /></h3>
+		<div className="text-center mb-3">
+			<Button variant="primary" size="lg">Add Cart <i className="fas fa-cart-plus"></i></Button>
+			<hr className="mt-4"/>
+			<h3 className="mt-3 text-success"><Price value={ prod.price } /></h3>
 			<p className="text-muted"><s><Price value={ prod.discounted_price } /></s></p>
-			<Button variant="primary" size="lg">Add to Cart</Button>
 		</div>
 	)
 }

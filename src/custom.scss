@@ -22,7 +22,7 @@ $secondary: #2a8ea6;
   
 .fading-appear.fading-appear-active {
     opacity: 1;
-    transition: opacity .5s ease-in;
+    transition: opacity 1000ms ease-in;
 }
 .fading-enter {
     opacity: 0.01;
@@ -34,11 +34,10 @@ $secondary: #2a8ea6;
 }
 
 .fading-leave {
-    opacity: 0;
-    transition-delay: 0s!important;
+    opacity: 0.5;
 }
 
 .fading-leave.fading-leave-active {
     opacity: 0.01;
-    transition: opacity 50ms ease-in;
+    transition: opacity 300ms ease-in;
 }

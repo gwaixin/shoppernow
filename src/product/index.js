@@ -1,27 +1,60 @@
 import React from 'react'
 import axios from 'axios'
-import { Container, Row, Col } from 'react-bootstrap'
-import Detail from './Detail'
+import { Container, Row, Col, Card, Image } from 'react-bootstrap'
+import ProductAdons from './ProductAdons'
 import AddToCart from './AddToCart'
 import RelatedProducts from './RelatedProducts'
+import ProductReviews from './ProductReviews'
+import ProductAttributes from './ProductAttributes'
 import NotFound from '../component/NotFound'
+import './product.css'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 class Index extends React.Component {
 
 	state = {
-		product: {}
+		product: {},
+		related: []
 	}
 
 	componentDidMount() {
-		let id = this.props.match.params.id
-		let slug = this.props.match.params.slug
+		const id = this.props.match.params.id
+		const slug = this.props.match.params.slug
+		this.onFetchProduct(id, slug)
+	}
+
+	// update when received a new product
+	componentWillReceiveProps(nextProps) {
+
+		if (nextProps.location.state === 'newProduct') {
+
+			const id = nextProps.match.params.id
+			const slug = nextProps.match.params.slug
+
+			// must clear product
+			this.setState({ product: {}}, () => {
+				window.scrollTo(0, 0)
+				// before fetch and update
+				setTimeout(() => {
+					
+					this.onFetchProduct(id, slug)
+				}, 300)
+			})
+			
+		}
+	}
+
+	// fetch specific product with @id and @slug
+	onFetchProduct(id, slug) {
 
 		axios.get('http://localhost:3006/api/products/'+id+'/'+slug)
 			.then(res => {
 				if (res.data.status) {
 					const product = res.data.product
-					this.setState({ product })
-					console.log('product daw : ', product)
+					const related = res.data.related
+
+					console.log('product : ', res.data.product)
+					this.setState({ product, related })
 				}
 			})
 	}
@@ -35,24 +68,59 @@ class Index extends React.Component {
 	
 					{/* Product Detail */}
 					<Row>
-						<Col md={12}>
-							<h1 className="mt-3 mb-3">{ this.state.product.name }</h1>
+						<Col md={9} className="mb-3">
+							<Card>
+								<Card.Body className="product-detail">
+									<h1 className="mb-3">{ this.state.product.name }</h1>
+									<ReactCSSTransitionGroup
+										transitionName="fading"
+										transitionEnterTimeout={500}
+										transitionLeaveTimeout={300}>
+										{
+											this.state.product.image ? 
+											<Row>
+												<Col md={3}>
+													<Image thumbnail src={`/images/products/${this.state.product.image}`} alt="" fluid />
+												</Col>
+												<Col md={7}>
+													<p className="text-justify">{ this.state.product.description }</p>
+													<ProductAttributes attributes={ this.state.product.attributes } />
+												</Col>
+												<Col md={2}>
+													<Image src={`/images/products/${this.state.product.image_2}`} alt="" fluid />
+												
+												</Col>
+											</Row>
+											: null
+										}
+									</ReactCSSTransitionGroup>
+								</Card.Body>
+								<Card.Footer>
+									<ProductAdons product={ this.state.product } />
+								</Card.Footer>
+							</Card>
 						</Col>
-						<Col md={2}>
-							<img src={`/images/products/${this.state.product.image}`} alt="" className="img-fluid" />
-						</Col>
-						<Col md={6}>
-							<Detail product={ this.state.product } />
-						</Col>
-						<Col md={4}>
-							<AddToCart product={ this.state.product } />
+						<Col md={3}>
+							<Card>
+								<Card.Body>
+									<AddToCart product={ this.state.product } />
+								</Card.Body>
+							</Card>
 						</Col>
 					</Row>
+					
+					{/* Product Reviews */}
+					<Row className="mt-5">
+						<Col md={12}>
+							<ProductReviews product={ this.state.product }/>
+						</Col>
+					</Row>
+
 	
 					{/* Related Products */}
 					<Row className="mt-5">
 						<Col md={12}>
-							<RelatedProducts />
+							<RelatedProducts related={ this.state.related }/>
 						</Col>
 					</Row>
 				</Container>
