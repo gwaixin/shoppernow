@@ -2,9 +2,20 @@
 import React from 'react'
 import { Container, Row, Col, Button, Card } from 'react-bootstrap'
 import Item from './Item'
+import { Network } from '../helpers'
 
 
 class Index extends React.Component {
+
+
+	componentDidMount() {
+		Network({auth: true})
+			.get('/api/cart')
+			.then(res => {
+				console.log('result is: ', res)
+			})
+	}
+
 	render() {
 		return(
 			<Container>

@@ -1,6 +1,6 @@
 // Override default variables before the import
 $body-bg: #f8f9fa;
-$body-color: #010302;
+$body-color: #333;
 $primary: #0590c7;
 $secondary: #2a8ea6;
 
@@ -16,6 +16,8 @@ $secondary: #2a8ea6;
 // custom style
 .text-strike { text-decoration: line-through; }
 .full-width { width: 100%; }
+h1, h2, h3 { font-weight: 1000; }
+
 .fading-appear {
     opacity: 0.01;
 }
