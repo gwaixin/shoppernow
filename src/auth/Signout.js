@@ -1,7 +1,21 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
+import { removeToken } from '../assets/js/actions/index'
+import { connect } from "react-redux"
+
+const mapDispatchToProps = dispatch => {
+	return { removeToken: () => dispatch(removeToken()) }
+}
 
 class Signout extends React.Component {
+	componentDidMount() {
+		// redirect after 5 seconds
+		this.props.removeToken()
+		setTimeout(() => {
+			window.location.href = '/'
+		}, 5000)
+	}
+
 	render() {
 		return(
 			<Container>
@@ -15,4 +29,4 @@ class Signout extends React.Component {
 	}
 }
 
-export default Signout
+export default connect(null, mapDispatchToProps) (Signout)

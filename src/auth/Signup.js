@@ -93,12 +93,12 @@ class Signup extends React.Component {
 								</Alert>
 							: ''
 						}
-						<Alert variant={this.state.status}>
-							<Alert.Heading>
-								<h2 className="mb-3 mt-3">
-									Signup Now <i className="float-right fas fa-user-plus"></i> 
-								</h2>
-							</Alert.Heading>
+						<div className="mt-5">
+							
+							<h2 className="mb-3 mt-3">
+								Signup Now <i className="float-right fas fa-user-plus"></i> 
+							</h2>
+							
 							<Form onSubmit={this.onSubmit.bind(this)}>
 								<Form.Group controlId="formBasicEmail">
 									<Form.Label>Email address</Form.Label>
@@ -132,7 +132,7 @@ class Signup extends React.Component {
 									Signup
 								</Button>
 							</Form>
-						</Alert>
+						</div>
 					</Col>
 				</Row>
 			</Container>

@@ -11,7 +11,7 @@ const Network = (config) => {
         if (config.baseURL) { networkConfig.baseURL = config.baseURL }
 
         // checks if this request needs authentication
-        if (config.auth) { networkConfig.headers = {'Authorization': "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImNyZWF0ZWRfYXQiOiIyMDE5LTAzLTA4VDA4OjA0OjU3LjY3NloiLCJ1cGRhdGVkX2F0IjoiMjAxOS0wMy0wOFQwODowNDo1Ny42NzZaIiwiX2lkIjoiNWM4MjIyMzZiY2RhMzAzMDg4MTMxNzE5IiwibmFtZSI6Ik5pY2hvbGUgSm9obiBNYXJ0aW5leiIsImVtYWlsIjoiZGFsdXdpZEBnbWFpbC5jb20iLCJwYXNzd29yZCI6ImRhMzUxOTdiMTY2MmQ0OGUwZTlmZjc4ZjhhMzI0NmI5IiwiX192IjowfSwiaWF0IjoxNTUyMDM1ODcwLCJleHAiOjE1NTIwNDMwNzB9.rHqpI2t3AG6DIWgKjPr3M47SkybKkbP4HRAgI1j0o6Q"} }
+        if (config.token) { networkConfig.headers = {'Authorization': "bearer " + config.token} }
     }
 
     // create network request

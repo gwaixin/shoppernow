@@ -9,7 +9,7 @@ const Product = (props) => {
 	let prod = props.product
 	let url = "/product/"+ prod.product_id + "/" + prod.slug
 
-	let specialitem = Math.random() >= 0.9 ? 'product-item special' : 'product-item'
+	let specialitem = 'product-item'
 
 	return(
 		<Link className={specialitem}  to={url}>

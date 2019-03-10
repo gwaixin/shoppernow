@@ -1,10 +1,17 @@
 import React from 'react'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { connect } from "react-redux"
 import { ErrorHandler, Network } from '../helpers'
 import AuthAlert from './AuthAlert'
+import { addToken } from "../assets/js/actions/index"
 
-class Signin extends React.Component {
+
+const mapDispatchToProps = dispatch => {
+	return { addToken: token => dispatch(addToken(token)) }
+}
+
+class SigninComponent extends React.Component {
 
 	state = {
 		errors: null,
@@ -32,6 +39,7 @@ class Signin extends React.Component {
 					if (res.data.status) {
 						// success
 						return this.setState({ status: 'success' }, () => {
+							this.props.addToken(res.data.token)
 							// setTimeout(() => {
 							// 	window.location.href = '/'
 							// }, 3000)
@@ -99,5 +107,7 @@ class Signin extends React.Component {
 		)
 	}
 }
+
+const Signin = connect(null, mapDispatchToProps) (SigninComponent)
 
 export default Signin

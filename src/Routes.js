@@ -7,6 +7,8 @@ import React from 'react'
 import Loadable from 'react-loadable'
 import App from './App'
 import Loading from './component/Loading'
+import { Provider } from "react-redux"
+import store from "./assets/js/store/index"
 
 const Products = Loadable({
   loader: () => import('./products'),
@@ -38,18 +40,21 @@ const Signout = Loadable({
 	loading: Loading
 })
 
-const Routes = props => {
+const Routes = () => {
+
   return (
   	<Router>
 			<Switch>
+				<Provider store={store}>
 	  			<App>
-					<Route exact={true} path="/" component={Products} />
-					<Route path="/product/:id/:slug" component={Product} />
-					<Route path="/cart" component={Cart} />
-					<Route path="/signin" component={Signin} />
-					<Route path="/signup" component={Signup} />
-					<Route path="/signout" component={Signout} />
-				</App>
+						<Route exact={true} path="/" component={Products} />
+						<Route path="/product/:id/:slug" component={Product} />
+						<Route path="/cart" component={Cart} />
+						<Route path="/signin" component={Signin} />
+						<Route path="/signup" component={Signup} />
+						<Route path="/signout" component={Signout} />
+					</App>
+				</Provider>
 			</Switch>
 		</Router>
 	)

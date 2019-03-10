@@ -3,17 +3,24 @@ import React from 'react'
 import { Container, Row, Col, Button, Card } from 'react-bootstrap'
 import Item from './Item'
 import { Network } from '../helpers'
+import { connect } from "react-redux"
+
+const mapStateToProps = state => {
+  return { token: state.token };
+}
 
 
 class Index extends React.Component {
 
 
 	componentDidMount() {
-		Network({auth: true})
+		Network({token: this.props.token})
 			.get('/api/cart')
 			.then(res => {
 				console.log('result is: ', res)
 			})
+
+		console.log('token is : ', this.props.token)
 	}
 
 	render() {
@@ -46,4 +53,6 @@ class Index extends React.Component {
 	}
 }
 
-export default Index
+const Cart = connect(mapStateToProps) (Index)
+
+export default Cart
