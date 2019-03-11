@@ -1,7 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Route,
-	Switch
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect
 } from 'react-router-dom'
 import React from 'react'
 import Loadable from 'react-loadable'
@@ -40,20 +41,56 @@ const Signout = Loadable({
 	loading: Loading
 })
 
+
+const getRoutes = (store) => {
+
+	// routes for authenticated users only
+	const RouteAuth = ({ component: Component, ...rest }) => (
+		<Route {...rest}
+			render={ props => {
+				const state = store.getState()
+				if (state.token)
+					return <Component {...props} />
+				else
+					return <Redirect to={{ pathname: '/signin', state: { from: props.location } }} />
+			}}
+		/>
+	)
+
+	// routes for guest only
+	const RouteGuest = ({ component: Component, ...rest }) => (
+		<Route {...rest}
+			render={ props => {
+				const state = store.getState()
+				if (state.token === '')
+					return <Component {...props} />
+				else
+					return <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+			}}
+		/>
+	)
+
+	return(
+		<App>
+			<Route exact={true} path="/" component={Products} />
+			<Route path="/product/:id/:slug" component={Product} />
+			<RouteAuth path="/cart" component={Cart} />
+			<RouteGuest path="/signin" component={Signin} />
+			<RouteGuest path="/signup" component={Signup} />
+			<Route path="/signout" component={Signout} />
+		</App>
+	)
+}
+
+// const RouteGuest
+
 const Routes = () => {
 
   return (
   	<Router>
 			<Switch>
 				<Provider store={store}>
-	  			<App>
-						<Route exact={true} path="/" component={Products} />
-						<Route path="/product/:id/:slug" component={Product} />
-						<Route path="/cart" component={Cart} />
-						<Route path="/signin" component={Signin} />
-						<Route path="/signup" component={Signup} />
-						<Route path="/signout" component={Signout} />
-					</App>
+	  				{ getRoutes(store) }
 				</Provider>
 			</Switch>
 		</Router>
