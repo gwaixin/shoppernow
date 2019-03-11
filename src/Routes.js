@@ -46,6 +46,11 @@ const Profile = Loadable({
 	loading: Loading
 })
 
+const Account = Loadable({
+	loader: () => import('./account'),
+	loading: Loading
+})
+
 
 const getRoutes = (store) => {
 
@@ -54,6 +59,7 @@ const getRoutes = (store) => {
 		<Route {...rest}
 			render={ props => {
 				const state = store.getState()
+
 				if (state.token)
 					return <Component {...props} />
 				else
@@ -82,6 +88,7 @@ const getRoutes = (store) => {
 
 			<RouteAuth path="/cart" component={Cart} />
 			<RouteAuth path="/profile" component={Profile} />
+			<RouteAuth path="/setting" component={Account} />
 
 			<RouteGuest path="/signin" component={Signin} />
 			<RouteGuest path="/signup" component={Signup} />

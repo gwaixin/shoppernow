@@ -96,7 +96,7 @@ class Signup extends React.Component {
 						<div className="mt-5">
 							
 							<h2 className="mb-3 mt-3">
-								Signup Now <i className="float-right fas fa-user-plus"></i> 
+								Signup Now
 							</h2>
 							
 							<Form onSubmit={this.onSubmit.bind(this)}>
@@ -122,15 +122,14 @@ class Signup extends React.Component {
 									<Form.Label>Confirm Password</Form.Label>
 									<Form.Control name="password_confirm" type="password" placeholder="Confirm Password" required />
 								</Form.Group>
-								<hr className="mt-5"/>
-								<Form.Group controlId="formBasicChecbox" className="mt-3">
+								<Form.Group controlId="formBasicChecbox" className="mt-5">
 									<Form.Text className="text-muted">
 										Already signin? login <Link to="/signin">here</Link>
 									</Form.Text>
+									<Button className="mt-3" variant="primary" type="submit">
+										<i className="fas fa-user-plus"></i>  Signup 
+									</Button>
 								</Form.Group>
-								<Button variant="primary" type="submit">
-									Signup
-								</Button>
 							</Form>
 						</div>
 					</Col>
