@@ -36,7 +36,7 @@ class Signup extends React.Component {
 						// succes
 						return this.setState({ status: 'success'}, () => {
 							setTimeout(() => {
-								window.location.href = '/'
+								this.props.history.push('/signin')
 							}, 3000)
 						})
 

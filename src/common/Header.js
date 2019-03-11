@@ -8,9 +8,32 @@ import {
 	Nav,
 	NavDropdown,
 	Image
-} from 'react-bootstrap';
+} from 'react-bootstrap'
+import { connect } from "react-redux"
 
-class Header extends React.Component {
+const mapStateToProps = state => {
+	return { token: state.token }
+}
+
+class HeaderComp extends React.Component {
+
+	state = {
+		isGuest: true,
+	}
+
+	componentDidMount() {
+		const isGuest = this.props.token === ''
+		this.setState({ isGuest })
+	}
+
+	// update when reveived authenticated
+	componentWillReceiveProps(nextProps) {
+		if (typeof nextProps.token !== 'undefined') {
+			const isGuest = nextProps.token === ''
+			this.setState({ isGuest })
+		}
+	}
+
 	render() {
 		return(
 			<header>
@@ -28,15 +51,15 @@ class Header extends React.Component {
 							  <Navbar.Collapse id="basic-navbar-nav">
 							    <Nav className="ml-auto">
 							      <Nav.Link as={Link} to="/">Home</Nav.Link>
-							      <Nav.Link as={Link} to="/cart">My Cart</Nav.Link>
-							      <NavDropdown title="Account" id="basic-nav-dropdown">
+							      { !this.state.isGuest && <Nav.Link as={Link} to="/cart">My Cart</Nav.Link> }
+							      { !this.state.isGuest && <NavDropdown title="Account" id="basic-nav-dropdown">
 							        <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
 							        <NavDropdown.Item as={Link} to="/setting">Setting</NavDropdown.Item>
 							        <NavDropdown.Divider />
-							        <NavDropdown.Item href="/signout">Signout</NavDropdown.Item>
-							      </NavDropdown>
-										<Nav.Link as={Link} to="/signin">Signin</Nav.Link>
-										<Nav.Link as={Link} to="/signup">Signup</Nav.Link>
+							        <NavDropdown.Item as={Link} to="/signout">Signout</NavDropdown.Item>
+							      </NavDropdown> }
+										{ this.state.isGuest && <Nav.Link as={Link} to="/signin">Signin</Nav.Link> }
+										{ this.state.isGuest && <Nav.Link as={Link} to="/signup">Signup</Nav.Link> }
 							    </Nav>
 							  </Navbar.Collapse>
 							</Navbar>
@@ -47,5 +70,7 @@ class Header extends React.Component {
 		)
 	}
 }
+
+const Header = connect(mapStateToProps) (HeaderComp)
 
 export default Header

@@ -12,7 +12,7 @@ class Signout extends React.Component {
 		// redirect after 5 seconds
 		this.props.removeToken()
 		setTimeout(() => {
-			window.location.href = '/'
+			this.props.history.push('/')
 		}, 5000)
 	}
 

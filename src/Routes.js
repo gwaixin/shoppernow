@@ -41,6 +41,11 @@ const Signout = Loadable({
 	loading: Loading
 })
 
+const Profile = Loadable({
+	loader: () => import('./profile'),
+	loading: Loading
+})
+
 
 const getRoutes = (store) => {
 
@@ -74,7 +79,10 @@ const getRoutes = (store) => {
 		<App>
 			<Route exact={true} path="/" component={Products} />
 			<Route path="/product/:id/:slug" component={Product} />
+
 			<RouteAuth path="/cart" component={Cart} />
+			<RouteAuth path="/profile" component={Profile} />
+
 			<RouteGuest path="/signin" component={Signin} />
 			<RouteGuest path="/signup" component={Signup} />
 			<Route path="/signout" component={Signout} />

@@ -40,9 +40,9 @@ class SigninComponent extends React.Component {
 						// success
 						return this.setState({ status: 'success' }, () => {
 							this.props.addToken(res.data.token)
-							// setTimeout(() => {
-							// 	window.location.href = '/'
-							// }, 3000)
+							setTimeout(() => {
+								this.props.history.push({pathname: '/', state: 'authenticated'})
+							}, 3000)
 						})
 					}
 

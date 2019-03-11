@@ -19,8 +19,6 @@ class Index extends React.Component {
 			.then(res => {
 				console.log('result is: ', res)
 			})
-
-		console.log('token is : ', this.props.token)
 	}
 
 	render() {
