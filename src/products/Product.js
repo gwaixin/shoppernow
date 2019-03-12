@@ -22,7 +22,12 @@ const Product = (props) => {
 								<Price value={ prod.price } />
 							</strong> 
 						</div>
-						<small className="text-muted"><Price value={ prod.discounted_price } isDiscount={true} /></small>
+						<small className="text-muted">
+							<Price 
+								value={ prod.discounted_price } 
+								isDiscount={true}
+								hideZero={true} />
+						</small>
 					</div>
 				
 					<span className="product-name">{ prod.name }</span>

@@ -9,6 +9,11 @@ import ProductAttributes from './ProductAttributes'
 import NotFound from '../component/NotFound'
 import './product.css'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { connect } from 'react-redux'
+
+const mapStateToProps = state => {
+	return { token: state.token }
+}
 
 class Index extends React.Component {
 
@@ -103,7 +108,9 @@ class Index extends React.Component {
 						<Col md={3}>
 							<Card>
 								<Card.Body>
-									<AddToCart product={ this.state.product } />
+									<AddToCart 
+										token={ this.props.token }
+										product={ this.state.product } />
 								</Card.Body>
 							</Card>
 						</Col>
@@ -129,4 +136,4 @@ class Index extends React.Component {
 	}
 }
 
-export default Index
+export default connect(mapStateToProps) (Index)

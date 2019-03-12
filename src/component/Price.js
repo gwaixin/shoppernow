@@ -7,7 +7,7 @@ const Price = (props) => {
     let isDiscount = props.isDiscount ? 'text-strike' : ''
     let percentage = props.isDiscount ? '18%' : ''
 
-    if (props.value > 0) {
+    if (!props.hideZero || props.value > 0) {
 
         return (
             <span>
