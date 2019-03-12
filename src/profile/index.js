@@ -12,10 +12,15 @@ import Contact from './Contact'
 import Location from './Location'
 import { Network } from '../helpers'
 import { connect } from 'react-redux'
-import {ToastsContainer, ToastsStore} from 'react-toasts'
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
+import { removeToken } from '../assets/js/actions/index'
 
 const mapStateToProps = state => {
 	return { token: state.token }
+}
+
+const mapDispatchToProps = dispatch => {
+	return { removeToken: () => dispatch(removeToken()) }
 }
 
 
@@ -23,15 +28,22 @@ class Index extends React.Component {
 	state = {
 		profile: {}
 	}
-
 	
 
 	componentDidMount() {
 		Network({token: this.props.token})
 			.post('/api/auth/check')
 			.then(res => {
-				const profile = res.data.user
-				this.setState({ profile })
+				if (res.data.user) {
+					const profile = res.data.user
+					this.setState({ profile })
+				} else {
+					ToastsStore.error("Session expire, please login again")
+					this.props.removeToken()
+					setTimeout(() => {
+						this.props.history.push('/signin')
+					}, 1000)
+				}
 			})
 	}
 
@@ -64,6 +76,9 @@ class Index extends React.Component {
 					ToastsStore.error("Failed to update profile! Please try again.")
 				}
 			})
+			.catch(e => {
+				ToastsStore.error("Failed to update profile! Please try again. " + e)
+			})
 
 		
 	}
@@ -71,7 +86,10 @@ class Index extends React.Component {
 	render() {
 		return (
 			<Container>
-				<ToastsContainer store={ToastsStore} lightBackground/>
+				<ToastsContainer 
+					position={ToastsContainerPosition.TOP_CENTER}
+					store={ToastsStore} 
+					lightBackground />
 				<Row>
 					<Col md={12}>
 						<Card border="dark" bg="light">
@@ -111,4 +129,4 @@ class Index extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps) (Index)
+export default connect(mapStateToProps, mapDispatchToProps) (Index)
