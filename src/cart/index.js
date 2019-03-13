@@ -8,6 +8,7 @@ import Price from '../component/Price'
 import CustomModal from '../component/CustomModal'
 import ListCart from './ListCart'
 import ItemEditModal from './ItemEditModal'
+import CheckoutModal from './CheckoutModal'
 
 const mapStateToProps = state => {
   return { token: state.token };
@@ -17,7 +18,7 @@ const mapStateToProps = state => {
 class Index extends React.Component {
 
 	state = {
-		cart: [],
+		cart: null,
 		total: 0,
 
 		// remove state properties
@@ -26,11 +27,27 @@ class Index extends React.Component {
 
 		// edit state properties
 		editItem: null,
-		editShow: false
+		editShow: false,
+
+		// checkout state properties
+		showCheckout: false
 	}
 
 
 	componentDidMount() {
+		this.initCart()
+	}
+
+	calcTotal(cart) {
+		var total = 0
+		cart.forEach(item => {
+			total += item.quantity * item.product_id.price
+		})
+
+		return total
+	}
+
+	initCart() {
 		Network({token: this.props.token})
 			.get('/api/cart')
 			.then(res => {
@@ -47,15 +64,6 @@ class Index extends React.Component {
 					ToastsStore.error("Failed to fetch data : " + errors.join(', '))
 				}
 			})
-	}
-
-	calcTotal(cart) {
-		var total = 0
-		cart.forEach(item => {
-			total += item.quantity * item.product_id.price
-		})
-
-		return total
 	}
 
 
@@ -153,6 +161,38 @@ class Index extends React.Component {
 	}
 
 
+	// ----------------------------- CHECKOUT FUNCTIONS --------------------------
+	onHideCheckout() { this.setState({ showCheckout: false }) }
+	onShowCheckout() { this.setState({ showCheckout: true }) }
+	onFinalCheckout(data) {
+		Network({ token: this.props.token })
+			.post('/api/orders', data)
+			.then(res => {
+
+				// check if checkout was a success
+				if (res.data.status) {
+					// popup info
+					ToastsStore.success("Checkout success!! \n you can view your order status in /orders page")
+
+					// hides popup checkout
+					this.onHideCheckout()
+
+					// update cart
+					this.initCart()
+
+
+				// otherwise handle error
+				} else {
+					let errors = ErrorHandler(res)
+					ToastsStore.error("Failed to checkout! \n " + errors.join(', '))
+				}
+			})
+			.catch(err => {
+				let errors = ErrorHandler(err)
+				ToastsStore.error("Failed to checkout! \n " + errors.join(', '))
+			}) 
+	}
+
 
 	render() {
 
@@ -186,6 +226,12 @@ class Index extends React.Component {
 						onEditSubmit={this.onEditSubmit.bind(this)}
 						item={this.state.editItem} />
 
+					<CheckoutModal
+						isShow={this.state.showCheckout}
+						onHide={this.onHideCheckout.bind(this)}
+						cart={this.state.cart}
+						onFinalCheckout={this.onFinalCheckout.bind(this)} />
+
 
 					<Col md={12}>
 						<h3 className="mb-3 mt-3">Shopping Carts</h3>
@@ -199,13 +245,16 @@ class Index extends React.Component {
 					</Col>
 
 					<Col md={3}>
-						<Card className="sticky-top pb-3">
-							<Card.Body className="text-center">
-									<h5 className="mb-3">TOTAL</h5>
-									<h3><Price value={ this.state.total } /></h3>
-									<Button variant="success" className="mt-3">Checkout Now!</Button>
-							</Card.Body>
-						</Card>
+						{ 
+							!this.state.cart || this.state.cart.length <= 0 ? null :
+							<Card className="sticky-top pb-3">
+								<Card.Body className="text-center">
+										<h5 className="mb-3">TOTAL</h5>
+										<h3><Price value={ this.state.total } /></h3>
+										<Button variant="success" className="mt-3" onClick={this.onShowCheckout.bind(this)}>Checkout Now!</Button>
+								</Card.Body>
+							</Card>
+						}
 					</Col>
 				</Row>
 			</Container>

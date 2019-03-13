@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap'
 
 const CustomModal = (props) => {
 
+    const mfooter = props.footer ? <Modal.Footer>{ props.footer }</Modal.Footer> : null
 
     return (
         <Modal 
@@ -13,14 +14,13 @@ const CustomModal = (props) => {
             centered 
             >
             <Modal.Header closeButton>
-                { props.title }
+                <h4>{ props.title }</h4>
             </Modal.Header>
             <Modal.Body>
                 { props.body }
             </Modal.Body>
-            <Modal.Footer>
-                { props.footer }
-            </Modal.Footer>
+
+            { mfooter }
         </Modal>
     )
 }

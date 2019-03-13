@@ -66,9 +66,7 @@ class AddToCart extends React.Component {
 				} else {
 					let errors = ErrorHandler(res)
 					ToastsStore.error("Failed to add cart! \n " + errors.join(', '))
-
 				}
-
 			})
 	}
 

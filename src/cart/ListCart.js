@@ -6,8 +6,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const ListCart = (props) => {
 
-    if (!props.cart || props.cart.length <= 0) {
+    if (!props.cart) {
         return <Loading />
+    }
+
+    if (props.cart.length <= 0) {
+        return <p>You have no items in cart.</p>
     }
 
 
