@@ -51,6 +51,10 @@ const Account = Loadable({
 	loading: Loading
 })
 
+const Orders = Loadable({
+	loader: () => import('./orders'),
+	loading: Loading
+})
 
 const getRoutes = (store) => {
 
@@ -89,6 +93,7 @@ const getRoutes = (store) => {
 			<RouteAuth path="/cart" component={Cart} />
 			<RouteAuth path="/profile" component={Profile} />
 			<RouteAuth path="/setting" component={Account} />
+			<RouteAuth path="/orders" component={Orders} />
 
 			<RouteGuest path="/signin" component={Signin} />
 			<RouteGuest path="/signup" component={Signup} />

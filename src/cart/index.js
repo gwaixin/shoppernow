@@ -234,7 +234,9 @@ class Index extends React.Component {
 
 
 					<Col md={12}>
-						<h3 className="mb-3 mt-3">Shopping Carts</h3>
+						<h3 className="mb-3 mt-3">
+							<i className="fa fa-shopping-cart"></i> My Carts
+						</h3>
 					</Col>
 
 					<Col md={9}>
