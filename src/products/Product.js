@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col, Card } from 'react-bootstrap'
-import Price from '../component/Price'
+import ProductPrice from './ProductPrice'
 
 
 const Product = (props) => {
@@ -10,6 +10,9 @@ const Product = (props) => {
 	let url = "/product/"+ prod.product_id + "/" + prod.slug
 
 	let specialitem = 'product-item'
+	let others = prod.ProductCategories.map(({ Category }) => { return { category: Category.name, department: Category.Department.name } })
+	let categories = others.map(_ => _.category).join(', ')
+	let departments = others.map(_ => _.department).join(', ')
 
 	return(
 		<Link className={specialitem}  to={url}>
@@ -17,25 +20,15 @@ const Product = (props) => {
 				<Card.Img variant="top" src={`/images/products/${prod.image}`} />
 				<Card.Body className="p-2">
 					<div className="price mb-1">
-						<div>
-							<strong>
-								<Price value={ prod.price } />
-							</strong> 
-						</div>
-						<small className="text-muted">
-							<Price 
-								value={ prod.discounted_price } 
-								isDiscount={true}
-								hideZero={true} />
-						</small>
+						<ProductPrice price={prod.price} discounted_price={prod.discounted_price} />
 					</div>
 				
 					<span className="product-name">{ prod.name }</span>
 					<div className="product-info">
 						<p className="text-muted">{ prod.description.substring(0, 50) + '...' }</p>
 						<Row className="adon">
-							<Col> { prod.category.department.name }</Col>
-							<Col className="text-right">{ prod.category.name }</Col>
+							<Col> { departments }</Col>
+							<Col className="text-right">{ categories }</Col>
 						</Row>
 					</div>
 				</Card.Body>

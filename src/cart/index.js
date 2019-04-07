@@ -7,11 +7,10 @@ import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toa
 import Price from '../component/Price'
 import CustomModal from '../component/CustomModal'
 import ListCart from './ListCart'
-import ItemEditModal from './ItemEditModal'
 import CheckoutModal from './CheckoutModal'
 
 const mapStateToProps = state => {
-  return { token: state.token };
+  return { token: state.token, cartId: state.cartId };
 }
 
 
@@ -25,10 +24,6 @@ class Index extends React.Component {
 		showConfirm: false,
 		removeId: '',
 
-		// edit state properties
-		editItem: null,
-		editShow: false,
-
 		// checkout state properties
 		showCheckout: false
 	}
@@ -41,14 +36,15 @@ class Index extends React.Component {
 	calcTotal(cart) {
 		var total = 0
 		cart.forEach(item => {
-			total += item.quantity * item.product_id.price
+			let newPrice = item.Product.discounted_price == 0 ? item.Product.price : item.Product.discounted_price
+			total += item.quantity * newPrice
 		})
 
 		return total
 	}
 
 	initCart() {
-		Network({token: this.props.token})
+		Network({params: { cart_id: this.props.cartId }})
 			.get('/api/cart')
 			.then(res => {
 				if (res.data.status) {
@@ -82,7 +78,7 @@ class Index extends React.Component {
 					ToastsStore.success("Item has been removed successfully from your cart.")
 
 					// remove  item from the list
-					const cart = this.state.cart.filter(item => item._id !== this.state.removeId)
+					const cart = this.state.cart.filter(item => item.item_id !== this.state.removeId)
 
 					// re update total
 					const total = this.calcTotal(cart)
@@ -103,61 +99,29 @@ class Index extends React.Component {
 
 
 	// ---------------------- EDIT FUNCTIONS -----------------
-	onEditShow(item) { this.setState({ editShow: true, editItem: item }) }
-	onEditHide() { this.setState({ editShow: false }) }
-	onEditSubmit(e) {
-		e.preventDefault()
+	onAdd(id, quantity) { 
+		Network()
+		.put('/api/cart/', { item_id: id, quantity: quantity })
+		.then(res => {
+			console.log(res.data)
+			if (res.data.status) {
+				this.initCart()
+				ToastsStore.success("Just added quantity")
+			}
+		})
+	}
+	onMinus(id, quantity) { 
+		if (quantity === 0) { return } 
 
-		let formData = {
-			id: this.state.editItem._id,
-			product: this.state.editItem.product_id._id,
-			quantity: e.currentTarget['quantity'].value,
-			size: e.currentTarget['size'].value,
-			color: e.currentTarget['color'].value,
-		}
-
-		let errors = []
-		// semi validation of size and color
-		if (formData.size === '') {
-			errors.push('Size must not be empty')
-		}
-		if (formData.color === '') {
-			errors.push('Color must not be empty')
-		}
-
-		if (errors.length > 0) {
-			ToastsStore.error("Failed to add cart! \n " + errors.join(', '))
-			return
-		}
-
-
-		Network({token: this.props.token})
-			.put('/api/cart', formData)
-			.then(res => {
-				// hides confirmation modal
-				this.onEditHide()
-				
-				// check if update was a success
-				if (res.data.status) {
-					// popup info
-					ToastsStore.success("Item has been updated successfully.")
-
-					// re update cart item
-					let cart = Object.assign([], this.state.cart)
-					const index = cart.findIndex(item => item._id === formData.id)
-					cart[index] = res.data.item
-
-					// re update total
-					const total = this.calcTotal(cart)
-
-					this.setState({ cart, total, editItem: null })
-				} else {
-
-					let errors = ErrorHandler(res)
-
-					ToastsStore.error("Item failed to remove " + errors.join(', '))
-				}
-			})
+		Network()
+		.put('/api/cart/', { item_id: id, quantity: quantity })
+		.then(res => {
+			console.log(res.data)
+			if (res.data.status) {
+				this.initCart()
+				ToastsStore.success("Just deducted quantity")
+			}
+		})
 	}
 
 
@@ -220,12 +184,6 @@ class Index extends React.Component {
 						body="Are you sure you want to remove this item to your cart?"
 						footer={confirmFooter} />
 
-					<ItemEditModal
-						isShow={this.state.editShow}
-						onHide={this.onEditHide.bind(this)}
-						onEditSubmit={this.onEditSubmit.bind(this)}
-						item={this.state.editItem} />
-
 					<CheckoutModal
 						isShow={this.state.showCheckout}
 						onHide={this.onHideCheckout.bind(this)}
@@ -242,8 +200,9 @@ class Index extends React.Component {
 					<Col md={9}>
 						<ListCart 
 							cart={this.state.cart}
-							onEditShow={this.onEditShow.bind(this)}
-							onShowConfirm={this.onShowConfirm.bind(this)}/>
+							onShowConfirm={this.onShowConfirm.bind(this)}
+							onAdd={this.onAdd.bind(this)} 
+							onMinus={this.onMinus.bind(this)} />
 					</Col>
 
 					<Col md={3}>

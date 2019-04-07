@@ -8,10 +8,11 @@ const Item = (props) => {
 
 	if (!props.item) { return null }
 	
-	const product = props.item.product_id
-	const color = props.item.attributes.filter(attr => attr.type === 'color')
-	const size = props.item.attributes.filter(attr => attr.type === 'size')
+	const product = props.item.Product
+	const prodAttribute = JSON.parse(props.item.attribute)
 	const url = "/product/"+ product.product_id + "/" + product.slug
+	const newprice = product.discounted_price == 0 ? product.price : product.discounted_price
+	const subtotal = newprice * props.item.quantity
 
 	return(
 		<div className="mb-3">
@@ -21,26 +22,27 @@ const Item = (props) => {
 						<Col md={2}>
 							<Image src={`/images/products/${product.image}`} fluid />
 						</Col>
-						<Col md={6}>
+						<Col md={10}>
+							<span className="float-right"><Price value={newprice} /></span>
 							<h4>{ product.name }</h4>
 							<p className="text-muted">{ product.description.substring(0, 100) + '...' }</p>
 							<div>
 								<small>
-									<b>Size</b> :  { size[0].value }
-									<b className="ml-3">Color</b> :  { color[0].value }
+									<b>Color</b> : { prodAttribute.color }
+									<b className="ml-3">Size</b> : { prodAttribute.size }
 									<b className="ml-3">Qty</b> :  { props.item.quantity } pcs
 								</small>
+								<div className="float-right text-right">
+									<Button size="sm" variant="dark" onClick={() => props.onMinus(props.item.item_id, props.item.quantity - 1)}><i className="fa fa-minus"></i></Button>
+									<Button className="ml-1" size="sm" variant="dark" onClick={() => props.onAdd(props.item.item_id, props.item.quantity + 1)}><i className="fa fa-plus"></i></Button>
+								</div>
 							</div>
-						</Col>
-						<Col md={4} className="text-right">
-							<Price value={product.price} />
 						</Col>
 					</Row>
 				</Card.Body>
 				<Card.Footer>
 					<Button as={Link} to={url} size="sm" variant="dark">View Details</Button>
-					<Button size="sm" variant="dark" className="ml-1" onClick={() => props.onEdit(props.item)}>Edit</Button>
-					<Button size="sm" variant="danger" className="ml-1" onClick={() => props.onRemove(props.item._id)}>Remove</Button>
+					<Button size="sm" variant="danger" className="ml-1" onClick={() => props.onRemove(props.item.item_id)}>Remove</Button>
 					<div className="float-right ml-auto text-right text-danger">
 						Subtotal : <Price value={ product.price * props.item.quantity  } />
 					</div>

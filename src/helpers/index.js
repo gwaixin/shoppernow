@@ -12,6 +12,12 @@ const Network = (config) => {
 
         // checks if this request needs authentication
         if (config.token) { networkConfig.headers = {'Authorization': "bearer " + config.token} }
+
+        // update to data
+        if (config.params) { networkConfig.params = config.params }
+
+        // methods
+        if (config.method) { networkConfig.method = config.method }
     }
 
     // create network request

@@ -4,9 +4,14 @@ import { Row, Col } from 'react-bootstrap'
 
 const Detail = (props) => {
 
-	let prod = props.product
 
-	if (prod.category) {
+	if (props.product && props.product.ProductCategories) {
+		let prod = props.product
+		let others = prod.ProductCategories.map(({ Category }) => { return { category: Category.name, department: Category.Department.name } })
+		let categories = others.map(_ => _.category).join(', ')
+		let departments = others.map(_ => _.department).join(', ')
+
+	
 		return (
 			<div>
 				<Row>
@@ -19,11 +24,11 @@ const Detail = (props) => {
 					</Col>
 					<Col className="text-right">
 						<b>Department</b>
-						<div><small>{ prod.category.department.name }</small></div>
+						<div><small>{ departments }</small></div>
 					</Col>
 					<Col className="text-right">
 						<b>Category</b>
-						<div><small>{ prod.category.name }</small></div>
+						<div><small>{ categories }</small></div>
 					</Col>
 				</Row>
 			</div>

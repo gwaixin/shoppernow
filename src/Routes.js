@@ -10,6 +10,7 @@ import App from './App'
 import Loading from './component/Loading'
 import { Provider } from "react-redux"
 import store from "./assets/js/store/index"
+import { updateCartId } from "./assets/js/actions/index"
 
 const Products = Loadable({
   loader: () => import('./products'),
@@ -58,12 +59,18 @@ const Orders = Loadable({
 
 const getRoutes = (store) => {
 
+	const state = store.getState()
+
+	// updates cart id for first time load
+	if (state.cartId === '') {
+		store.dispatch(updateCartId())
+	}
+
+
 	// routes for authenticated users only
 	const RouteAuth = ({ component: Component, ...rest }) => (
 		<Route {...rest}
 			render={ props => {
-				const state = store.getState()
-
 				if (state.token)
 					return <Component {...props} />
 				else
@@ -76,7 +83,6 @@ const getRoutes = (store) => {
 	const RouteGuest = ({ component: Component, ...rest }) => (
 		<Route {...rest}
 			render={ props => {
-				const state = store.getState()
 				if (state.token === '')
 					return <Component {...props} />
 				else
@@ -89,8 +95,8 @@ const getRoutes = (store) => {
 		<App>
 			<Route exact={true} path="/" component={Products} />
 			<Route path="/product/:id/:slug" component={Product} />
+			<Route path="/cart" component={Cart} />
 
-			<RouteAuth path="/cart" component={Cart} />
 			<RouteAuth path="/profile" component={Profile} />
 			<RouteAuth path="/setting" component={Account} />
 			<RouteAuth path="/orders" component={Orders} />

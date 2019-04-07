@@ -36,8 +36,8 @@ class Index extends React.Component {
 			if (res.data.status) {
 				const products = res.data.result.docs
 				const pages = res.data.result.pages
-				const page = res.data.result.page
-				this.setState({ products, pages, page})
+				// const page = res.data.result.page
+				this.setState({ products, pages})
 				// window.scrollTo(0, 0)
 			}
 		})

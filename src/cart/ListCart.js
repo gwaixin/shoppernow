@@ -27,7 +27,8 @@ const ListCart = (props) => {
                             item={item} 
                             key={`item-${index}`} 
                             onRemove={props.onShowConfirm}
-                            onEdit={props.onEditShow} />
+                            onAdd={props.onAdd}
+                            onMinus={props.onMinus} />
                 ) 
             }
         </ReactCSSTransitionGroup>

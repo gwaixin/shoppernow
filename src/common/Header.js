@@ -44,7 +44,7 @@ class HeaderComp extends React.Component {
 						<Navbar.Collapse id="basic-navbar-nav">
 							<Nav className="ml-auto">
 								<Nav.Link as={Link} to="/">HOME</Nav.Link>
-								{ !this.state.isGuest && <Nav.Link as={Link} to="/cart">MY CART</Nav.Link> }
+								<Nav.Link as={Link} to="/cart">MY CART</Nav.Link>
 								{ !this.state.isGuest && <Nav.Link as={Link} to="/orders">ORDER</Nav.Link> }
 								{ !this.state.isGuest && <NavDropdown title="ACCOUNT" id="basic-nav-dropdown">
 									<NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>

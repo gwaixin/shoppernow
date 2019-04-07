@@ -12,7 +12,10 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 
 const mapStateToProps = state => {
-	return { token: state.token }
+	return { 
+		token: state.token,
+		cartId: state.cartId
+	}
 }
 
 class Index extends React.Component {
@@ -26,6 +29,8 @@ class Index extends React.Component {
 		const id = this.props.match.params.id
 		const slug = this.props.match.params.slug
 		this.onFetchProduct(id, slug)
+
+		console.log('cart id here : ', this.props.cartId)
 	}
 
 	// update when received a new product
@@ -60,6 +65,8 @@ class Index extends React.Component {
 
 					console.log('product : ', res.data.product)
 					this.setState({ product, related })
+				} else {
+					this.setState({ product: null })
 				}
 			})
 	}
@@ -89,7 +96,7 @@ class Index extends React.Component {
 												</Col>
 												<Col md={7}>
 													<p className="text-justify">{ this.state.product.description }</p>
-													<ProductAttributes attributes={ this.state.product.attributes } />
+													<ProductAttributes attributes={ this.state.product.ProductAttributes } />
 												</Col>
 												<Col md={2}>
 													<Image src={`/images/products/${this.state.product.image_2}`} alt="" fluid />
@@ -110,7 +117,8 @@ class Index extends React.Component {
 								<Card.Body>
 									<AddToCart 
 										token={ this.props.token }
-										product={ this.state.product } />
+										product={ this.state.product }
+										cartId={ this.props.cartId } />
 								</Card.Body>
 							</Card>
 						</Col>

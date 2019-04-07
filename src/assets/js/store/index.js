@@ -4,12 +4,14 @@ import { getStateFromCookies } from 'redux-cookies-middleware'
 import reduxCookiesMiddleware from 'redux-cookies-middleware'
 
 let initialState = {
-	token: ''
+	token: '',
+	cartId: ''
 }
 
 // state to persist in cookies
 const paths = {
-  'token': { name: 'my_app_token' },
+	'token': { name: 'my_app_token' },
+	'cartId': { name: 'my_app_cart_id' }
 }
 
 // read stored data in cookies and merge it with the initial state

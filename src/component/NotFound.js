@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const NotFound = (props) => {
     return (
@@ -8,7 +9,7 @@ const NotFound = (props) => {
                 <Col>
                     <div className="text-danger">
                         <h1>{ props.message }</h1>
-                        <Button>Go Home</Button>    
+                        <Button as={Link} to="/">Go Home</Button>    
                     </div>
                 </Col>
             </Row>

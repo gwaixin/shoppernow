@@ -108,7 +108,7 @@ class CheckoutModal extends React.Component {
             details: this.props.cart.map(item => {
                 return {
                     product: item.product_id._id,
-                    attributes: item.attributes,
+                    // attributes: item.attributes,
                     product_name: item.product_id.name,
                     quantity: item.quantity,
                     unit_cost: item.product_id.price
@@ -183,9 +183,9 @@ class CheckoutModal extends React.Component {
                                             <td>
                                                <small>
                                                { 
-                                                    item.attributes.map((attr, ii) => {
-                                                        return (<div key={`detail-${index}-${ii}`}><b>{ attr.type }</b> : { attr.value }</div>)
-                                                    }) 
+                                                    // item.attributes.map((attr, ii) => {
+                                                    //     return (<div key={`detail-${index}-${ii}`}><b>{ attr.type }</b> : { attr.value }</div>)
+                                                    // }) 
                                                }
                                                </small>
                                             </td>

@@ -45,7 +45,7 @@ class ProductFilter extends React.Component {
 
 		// update categories too
 		const categories = this.state.categories
-		const catindex = categories.findIndex(cat => cat._id === id)
+		const catindex = categories.findIndex(cat => cat.category_id === id)
 
 		if (catindex !== -1) {
 			categories[catindex].isChecked = isChecked
@@ -78,14 +78,14 @@ class ProductFilter extends React.Component {
 			// or category's department belongs to filtered
 			let isDisabled = !(
 				filDepts.length <= 0 || 
-				filDepts.findIndex(f => f === cat.department) >= 0
+				filDepts.findIndex(f => f === cat.department_id) >= 0
 			)
 
 			cat.disabled = isDisabled
 
 			if (isDisabled && cat.isChecked) {
 				cat.isChecked = false
-				filCats = filCats.filter(fc => fc !== cat._id)
+				filCats = filCats.filter(fc => fc !== cat.category_id)
 			}
 
 			return cat
@@ -111,7 +111,7 @@ class ProductFilter extends React.Component {
 
 					// if this category belongs to this department then it should be filtered
 					if (deptCatIndex >= 0) {
-						filters.push(cat._id)
+						filters.push(cat.category_id)
 					}
 				})
 
@@ -137,10 +137,10 @@ class ProductFilter extends React.Component {
 							<Form.Check 
 				        custom
 								type="checkbox"
-								key={`d-${dept._id}`}
-								id={`dept-${dept._id}`}
+								key={`d-${dept.department_id}`}
+								id={`dept-${dept.department_id}`}
 								label={dept.name}
-								onChange={(e) => this.onCheckDepartment(e, dept._id)}
+								onChange={(e) => this.onCheckDepartment(e, dept.department_id)}
 				      />
 						))}
 					</Form>
@@ -153,9 +153,9 @@ class ProductFilter extends React.Component {
 							<Form.Check 
 				        custom
 								type="checkbox"
-								key={`c-${cat._id}`}
-								id={`cat-${cat._id}`}
-								onChange={ (e) => this.onCheckCategory(e.target.checked, cat._id) }
+								key={`c-${cat.category_id}`}
+								id={`cat-${cat.category_id}`}
+								onChange={ (e) => this.onCheckCategory(e.target.checked, cat.category_id) }
 								label={cat.name}
 								disabled={cat.disabled}
 								checked={cat.isChecked ? 'checked' : ''}

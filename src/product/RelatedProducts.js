@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Masonry from 'react-masonry-component'
 import Price from '../component/Price'
+import ProductPrice from './ProductPrice'
 
 const RelatedProducts = (props) => {
 
@@ -17,12 +18,7 @@ const RelatedProducts = (props) => {
 								<Card.Img src={`/images/products/${prod.image}`} />
 								<Card.Body>
 									<div className="price">
-										<div>
-											<strong>
-												<Price value={ prod.price } />
-											</strong> 
-										</div>
-										<small className="text-muted"><Price value={ prod.discounted_price } isDiscount={true} /></small>
+										<ProductPrice price={prod.price} discounted_price={prod.discounted_price} />
 									</div>
 									<span className="name">{prod.name}</span>
 								</Card.Body>
