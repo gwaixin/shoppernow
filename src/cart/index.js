@@ -36,7 +36,7 @@ class Index extends React.Component {
 	calcTotal(cart) {
 		var total = 0
 		cart.forEach(item => {
-			let newPrice = item.Product.discounted_price == 0 ? item.Product.price : item.Product.discounted_price
+			let newPrice = parseFloat(item.Product.discounted_price) === 0 ? item.Product.price : item.Product.discounted_price
 			total += item.quantity * newPrice
 		})
 
@@ -127,8 +127,22 @@ class Index extends React.Component {
 
 	// ----------------------------- CHECKOUT FUNCTIONS --------------------------
 	onHideCheckout() { this.setState({ showCheckout: false }) }
-	onShowCheckout() { this.setState({ showCheckout: true }) }
+	onShowCheckout() {
+		// make sure to have auth before checking out
+		if (!this.props.token) {
+			ToastsStore.error("Signin to checkout!", 1500)
+			setTimeout(() => {
+				this.props.history.push({
+					pathname: '/signin', state: 'checkout'
+				})
+			}, 1500)
+		} else {
+			this.setState({ showCheckout: true }) 
+		}
+	}
 	onFinalCheckout(data) {
+		data.inCartId = this.props.cartId
+
 		Network({ token: this.props.token })
 			.post('/api/orders', data)
 			.then(res => {

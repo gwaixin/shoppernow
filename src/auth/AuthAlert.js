@@ -20,6 +20,15 @@ const AuthAlert = (props) => {
                 <p>{ props.message }</p>
             </Alert>
         )
+    } else if (props.info) {
+        return (
+            <Alert variant="info">
+                <Alert.Heading>
+                    <i className="fas fa-info"></i> { props.title }!!
+                </Alert.Heading>
+                <p>{ props.message }</p>
+            </Alert>
+        )
     } else {
         return null
     }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Row, Col, Alert, Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { ErrorHandler } from '../helpers'
 
 class Signup extends React.Component {
 
@@ -34,20 +35,12 @@ class Signup extends React.Component {
 					// success sign up
 					if (res.data.status) {
 						// succes
-						return this.setState({ status: 'success'}, () => {
-							setTimeout(() => {
-								this.props.history.push('/signin')
-							}, 3000)
-						})
+						this.props.history.push({pathname: '/signin', state: 'signedup'})
 
 	
 					// otherwiser handle error below
-					} else if (res.data.message) {
-						errors.push(res.data.message)
-					} else if (res.data.error.message) {
-						errors = [res.data.error.message]
 					} else {
-						errors = ['There seems to be a problem, try again later.']
+						errors = ErrorHandler(res)
 					}
 
 					this.setState({errors, status: 'danger'})

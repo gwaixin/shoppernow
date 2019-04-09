@@ -2,7 +2,6 @@ import React from 'react'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Masonry from 'react-masonry-component'
-import Price from '../component/Price'
 import ProductPrice from './ProductPrice'
 
 const RelatedProducts = (props) => {

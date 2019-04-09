@@ -1,6 +1,5 @@
 import React from 'react'
-import { Button, Modal, Form, Col} from 'react-bootstrap'
-import Price from '../component/Price'
+import { Button, Modal, Form } from 'react-bootstrap'
 import { Network, ErrorHandler } from '../helpers'
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
 import ProductPrice from './ProductPrice'

@@ -11,20 +11,19 @@ class CheckoutModal extends React.Component {
         taxes: [],
         selectShipping: {},
         selectTax: {},
-        days: 0,
         computeTax: 0,
         total: 0
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.isShow) {
+        if (newProps.isShow && this.state.taxes.length === 0) {
             // fetch tax options
             Network()
                 .get('/api/orders/taxes')
                 .then(res => {
                     if (res.data.status) {
                         const taxes = res.data.taxes
-                        const selectTax = taxes.tax_1
+                        const selectTax = taxes[0]
                         this.setState({ taxes, selectTax}, this.computeTotal)
                     } else {
                         let errors = ErrorHandler(res)
@@ -65,7 +64,10 @@ class CheckoutModal extends React.Component {
     computeTotal() {
         let total = 0
         let computeTax = 0
-        this.props.cart.forEach(item => total += item.product_id.price * item.quantity)
+        this.props.cart.forEach(item => { 
+            const newprice = parseFloat(item.Product.discounted_price) === 0 ? item.Product.price : item.Product.discounted_price
+            total += newprice * item.quantity
+        })
 
         // shipping fee + taxes
         if (this.state.selectShipping.shipping_cost) {
@@ -84,10 +86,9 @@ class CheckoutModal extends React.Component {
 
 
     onChangeShipping(e) {
-        const shipindex = this.state.shippings.findIndex(ship => ship._id === e.currentTarget.value)
+        const shipindex = this.state.shippings.findIndex(ship => ship.shipping_id == e.currentTarget.value)
         const selectShipping = this.state.shippings[shipindex]
-        const days = selectShipping.shipping_days
-        this.setState({ selectShipping, days }, this.computeTotal)
+        this.setState({ selectShipping }, this.computeTotal)
     }
 
     onChangeTax(e) {
@@ -100,20 +101,8 @@ class CheckoutModal extends React.Component {
 
         // just preparing form data to checkout
         const formData = {
-            total_amount: this.state.total,
-            shipping: this.state.selectShipping._id,
-            tax: this.state.selectTax,
-            days: this.state.days,
-            carts: this.props.cart.map(item => item._id),
-            details: this.props.cart.map(item => {
-                return {
-                    product: item.product_id._id,
-                    // attributes: item.attributes,
-                    product_name: item.product_id.name,
-                    quantity: item.quantity,
-                    unit_cost: item.product_id.price
-                }
-            })
+            inShippingId: this.state.selectShipping.shipping_id,
+            inTaxId: this.state.selectTax.tax_id
         }
 
         // execute final checkout
@@ -135,7 +124,7 @@ class CheckoutModal extends React.Component {
                         {
                             this.state.shippings
                                 .map((shipping, index) => (
-                                    <option key={`opt-shp-${index}`} value={shipping._id}>
+                                    <option key={`opt-shp-${index}`} value={shipping.shipping_id}>
                                         {shipping.shipping_type} : {shipping.shipping_region}
                                     </option>
                                 ))
@@ -174,8 +163,8 @@ class CheckoutModal extends React.Component {
                         <tbody>
                             {
                                 this.props.cart.map((item, index) => {
-                                    const product = item.product_id
-                                    
+                                    const product = item.Product
+                                    const newprice = parseFloat(product.discounted_price) === 0 ? product.price : product.discounted_price
                                     return (
                                         <tr key={`item-${index}`}>
                                             <td width="100"><Image src={`/images/products/${product.thumbnail}`} fluid thumbnail /></td>
@@ -190,8 +179,8 @@ class CheckoutModal extends React.Component {
                                                </small>
                                             </td>
                                             <td className="text-center">{item.quantity}</td>
-                                            <td className="text-right"><Price value={product.price} /></td>
-                                            <td className="text-right"><Price value={product.price * item.quantity} /></td>
+                                            <td className="text-right"><Price value={newprice} /></td>
+                                            <td className="text-right"><Price value={newprice * item.quantity} /></td>
                                         </tr>
                                     )
                                 })

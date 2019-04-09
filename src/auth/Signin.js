@@ -15,7 +15,40 @@ class SigninComponent extends React.Component {
 
 	state = {
 		errors: null,
+		info: {
+			show: false,
+			title: '',
+			message: ''
+		},
 		status: 'secondary'
+	}
+
+	componentDidMount() {
+		console.log('weew :', this.props.location)
+		if (this.props.location) {
+			if (this.props.location.state === 'signedup') {
+				// signed up
+				this.setState({
+					info: {
+						show: true,
+						title: 'Signup Success',
+						message: 'Thank you for signing up! you can now sign in.'
+					}
+				})
+
+			} else if (this.props.location.state === 'checkout') {
+				// checkout
+				this.setState({
+					info: {
+						show: true,
+						title: 'Sign-In Required',
+						message: 'You need to sign in your account to checkout'
+					}
+				})
+
+				this.props.history.push({path: 'signin', state:''})
+			}
+		}
 	}
 
 	onSubmit(e) {
@@ -38,7 +71,8 @@ class SigninComponent extends React.Component {
 					// success signin
 					if (res.data.status) {
 						// success
-						return this.setState({ status: 'success' }, () => {
+						const info = { show: false, title: '', message: '' }
+						return this.setState({ status: 'success', errors: null, info }, () => {
 							this.props.addToken(res.data.token)
 							setTimeout(() => {
 								this.props.history.push({pathname: '/', state: 'authenticated'})
@@ -70,6 +104,11 @@ class SigninComponent extends React.Component {
 						
 						<AuthAlert errors={ this.state.errors } />
 						
+						<AuthAlert 
+							info={ this.state.info.show } 
+							title={this.state.info.title} 
+							message={this.state.info.message} />
+
 						<AuthAlert 
 							success={ this.state.status } 
 							title="Success Signin" 

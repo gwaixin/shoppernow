@@ -59,7 +59,7 @@ const Orders = Loadable({
 
 const getRoutes = (store) => {
 
-	const state = store.getState()
+	let state = store.getState()
 
 	// updates cart id for first time load
 	if (state.cartId === '') {
@@ -71,6 +71,7 @@ const getRoutes = (store) => {
 	const RouteAuth = ({ component: Component, ...rest }) => (
 		<Route {...rest}
 			render={ props => {
+				state = store.getState()
 				if (state.token)
 					return <Component {...props} />
 				else
@@ -83,6 +84,7 @@ const getRoutes = (store) => {
 	const RouteGuest = ({ component: Component, ...rest }) => (
 		<Route {...rest}
 			render={ props => {
+				state = store.getState()
 				if (state.token === '')
 					return <Component {...props} />
 				else

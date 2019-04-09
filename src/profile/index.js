@@ -13,14 +13,17 @@ import Location from './Location'
 import { Network } from '../helpers'
 import { connect } from 'react-redux'
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts'
-import { removeToken } from '../assets/js/actions/index'
+import { removeToken, addToken } from '../assets/js/actions/index'
 
 const mapStateToProps = state => {
 	return { token: state.token }
 }
 
 const mapDispatchToProps = dispatch => {
-	return { removeToken: () => dispatch(removeToken()) }
+	return { 
+		removeToken: () => dispatch(removeToken()),
+		addToken: token => dispatch(addToken(token))
+	}
 }
 
 
@@ -62,15 +65,17 @@ class Index extends React.Component {
 			day_phone: e.currentTarget['day_phone'].value,
 			eve_phone: e.currentTarget['eve_phone'].value,
 			mob_phone: e.currentTarget['mob_phone'].value,
-			_id: this.state.profile._id
+			customer_id: this.state.profile.customer_id
 		}
 
-		
 
 		Network({token: this.props.token})
 			.put('/api/users', formData)
 			.then(res => {
 				if (res.data.status) {
+					const profile = res.data.user
+					this.setState({ profile })
+					this.props.addToken(res.data.token)
 					ToastsStore.success("Congratulations, profile updated!")
 				} else {
 					ToastsStore.error("Failed to update profile! Please try again.")

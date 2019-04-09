@@ -39,6 +39,10 @@ const ErrorHandler = (res) => {
         errors.push(res.data.message)
     } else if (res.data.error.message) {
         errors.push(res.data.error.message)
+    } else if (res.data.error.name === 'SequelizeUniqueConstraintError') {
+        res.data.error.errors.forEach(err => {
+            errors.push(err.message)
+        })
     } else {
         errors.push('There seems to be a problem, try again later.')
     }
