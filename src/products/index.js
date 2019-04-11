@@ -21,6 +21,7 @@ class Index extends React.Component {
 
 	componentDidMount() {
 		this.updatePage()
+		this.timer = null;
 	}
 
 	updatePage() {
@@ -34,8 +35,8 @@ class Index extends React.Component {
 		})
 		.then(res => {
 			if (res.data.status) {
-				const products = res.data.result.docs
-				const pages = res.data.result.pages
+				const products = res.data.result.rows
+				const pages = Math.ceil(res.data.result.count / res.data.limit)
 				// const page = res.data.result.page
 				this.setState({ products, pages})
 				// window.scrollTo(0, 0)
@@ -51,11 +52,15 @@ class Index extends React.Component {
 	}
 
 	onSearch(event) {
-		event.preventDefault()
-		const keywords = event.target['search'].value
-		this.setState({ keywords, page: 1 }, () => {
-			this.updatePage()
-		})
+		clearTimeout(this.timer);
+
+        const keywords = event.target.value
+		const self = this
+		self.timer = setTimeout(() => {
+			self.setState({ keywords, page: 1 }, () => {
+				self.updatePage()
+			})
+		}, 800);
 		
 	}
 

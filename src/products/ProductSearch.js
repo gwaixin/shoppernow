@@ -4,13 +4,14 @@ import { Form } from 'react-bootstrap'
 const ProductSearch = (props) => {
 	
 	return(
-		<Form onSubmit={  props.onSearch }>
+		<Form>
 			<Form.Group>
 
 				<Form.Control 
 					type="text"
 					name="search"
-					placeholder="Search Product" />
+					placeholder="Search Product"
+					onChange={props.onSearch} />
 
 				<Form.Text className="text-muted">
 					Find the right item by searching it here.

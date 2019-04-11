@@ -18,7 +18,7 @@ const ListOrder = (props) => {
                             const taxCalc = (order.Tax.tax_percentage / 100) * pretotal
                             return (
                                 <ListGroup.Item key={`lo-${index}`} disabled={ order.status === 4 }>
-                                    <div class="float-right">Status: <Status code={ order.status } /></div>
+                                    <div className="float-right">Status: <Status code={ order.status } /></div>
                                     <h5>Order ID # {order.order_id} </h5>
                                     <Row>
                                         <Col>

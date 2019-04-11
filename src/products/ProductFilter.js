@@ -85,7 +85,7 @@ class ProductFilter extends React.Component {
 
 			if (isDisabled && cat.isChecked) {
 				cat.isChecked = false
-				filCats = filCats.filter(fc => fc !== cat.category_id)
+				filCats = filCats.filter(fc => fc != cat.category_id)
 			}
 
 			return cat
@@ -101,13 +101,14 @@ class ProductFilter extends React.Component {
 		let filDepts = this.state.filDepts
 		let filCats = this.state.filCats
 
+		console.log('filters : ', filDepts, filCats)
 		let filters = []
 
 		// this only means that filter by departments from its categories
 		if (filCats.length === 0 && filDepts.length > 0) {
 				
 				this.state.categories.forEach(cat => {
-					let deptCatIndex = filDepts.findIndex(dept => dept === cat.department)
+					let deptCatIndex = filDepts.findIndex(dept => dept === cat.Department.department_id)
 
 					// if this category belongs to this department then it should be filtered
 					if (deptCatIndex >= 0) {
