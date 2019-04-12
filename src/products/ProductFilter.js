@@ -12,7 +12,7 @@ class ProductFilter extends React.Component {
 	}
 
 	componentDidMount() {
-		Network().get('http://localhost:3006/api/categories', {})
+		Network().get('/api/categories', {})
 		.then(res => {
 			if (res.data.status) {
 				const categories = res.data.categories
@@ -20,7 +20,7 @@ class ProductFilter extends React.Component {
 			}
 		})
 
-		Network().get('http://localhost:3006/api/departments', {})
+		Network().get('/api/departments', {})
 		.then(res => {
 			if (res.data.status) {
 				const departments = res.data.departments
