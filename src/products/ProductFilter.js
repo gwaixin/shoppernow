@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import { Network } from '../helpers/'
 import { Form } from 'react-bootstrap'
 
 class ProductFilter extends React.Component {
@@ -12,7 +12,7 @@ class ProductFilter extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://localhost:3006/api/categories', {})
+		Network().get('http://localhost:3006/api/categories', {})
 		.then(res => {
 			if (res.data.status) {
 				const categories = res.data.categories
@@ -20,7 +20,7 @@ class ProductFilter extends React.Component {
 			}
 		})
 
-		axios.get('http://localhost:3006/api/departments', {})
+		Network().get('http://localhost:3006/api/departments', {})
 		.then(res => {
 			if (res.data.status) {
 				const departments = res.data.departments

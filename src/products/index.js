@@ -1,11 +1,11 @@
 import React from 'react'
-import axios from 'axios'
 import { Container, Row, Col, Card } from 'react-bootstrap'
 import ProductSearch from './ProductSearch'
 import ProductFilter from './ProductFilter'
 import ProductList from './ProductList'
 import Paginator from '../component/Paginator'
 import './products.css'
+import { Network } from '../helpers/'
 
 class Index extends React.Component {
 
@@ -25,7 +25,8 @@ class Index extends React.Component {
 	}
 
 	updatePage() {
-		axios.get('http://localhost:3006/api/products', {
+		Network()
+		.get('/api/products', {
 			params: {
 				limit: this.state.limit,
 				page: this.state.page,

@@ -1,8 +1,7 @@
 import React from 'react'
 import { Container, Row, Col, Alert, Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { ErrorHandler } from '../helpers'
+import { ErrorHandler, Network } from '../helpers'
 
 class Signup extends React.Component {
 
@@ -26,8 +25,8 @@ class Signup extends React.Component {
 
 		this.setState({ status: 'dark', errors: null }, () => {
 
-			axios
-				.post('http://localhost:3006/api/users', formData)
+			Network()
+				.post('/api/users', formData)
 				.then(res => {
 					
 					let errors = []

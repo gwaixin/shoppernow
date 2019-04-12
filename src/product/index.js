@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 import { Container, Row, Col, Card, Image } from 'react-bootstrap'
 import ProductAdons from './ProductAdons'
 import AddToCart from './AddToCart'
@@ -10,6 +9,7 @@ import NotFound from '../component/NotFound'
 import './product.css'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
+import { Network } from '../helpers'
 
 const mapStateToProps = state => {
 	return { 
@@ -57,7 +57,8 @@ class Index extends React.Component {
 	// fetch specific product with @id and @slug
 	onFetchProduct(id, slug) {
 
-		axios.get('http://localhost:3006/api/products/'+id+'/'+slug)
+		Network()
+			.get('/api/products/'+id+'/'+slug)
 			.then(res => {
 				if (res.data.status) {
 					const product = res.data.product
