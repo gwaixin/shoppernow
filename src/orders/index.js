@@ -120,7 +120,11 @@ class OrderIndex extends React.Component {
                         <h3 className="mb-3 mt-3">
                             <i className="fa fa-shopping-bag"></i> Order List
                         </h3>
-                        <ListOrder orders={this.state.orders} onPayingOut={this.onPayingOut.bind(this)}/>
+                        {
+                            this.state.orders.length > 0 ? 
+                                <ListOrder orders={this.state.orders} onPayingOut={this.onPayingOut.bind(this)}/> : 
+                                <p>No orders at the moment</p>
+                        }
                     </Col>
                 </Row>
             </Container>
