@@ -87,7 +87,7 @@ class OrderIndex extends React.Component {
                 orderId: order.order_id,
                 token: token.id,
                 currency: 'usd',
-                amount: total,
+                amount: amount,
                 description: 'Paid $' + total + ' for orders : ' + itemNames
             })
 
