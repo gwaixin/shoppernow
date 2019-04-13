@@ -25,7 +25,7 @@ const ListOrder = (props) => {
                                             <div><small>Subtotal : <Price value={ order.total_amount } /></small></div>
                                             <div><small>Shipping Fee : <Price value={ order.Shipping.shipping_cost } /></small></div>
                                             <div><small>Tax : <Price value={ taxCalc } /></small></div>
-                                            <div>TOTAL: <Price value={ pretotal } /></div>
+                                            <div>TOTAL: <Price value={ pretotal + taxCalc } /></div>
                                         </Col>
                                         <Col className="text-right">
                                             <div>EST: { order.shipped_on }</div>

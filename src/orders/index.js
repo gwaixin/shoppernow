@@ -1,5 +1,6 @@
 import React from 'react'
-import { Network, ErrorHandler } from '../helpers'
+import { Network, ErrorHandler, AddScripts } from '../helpers'
+import { Checkout } from '../helpers/stripe'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
 import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
@@ -25,8 +26,8 @@ class OrderIndex extends React.Component {
     componentDidMount() {
 
         // prepare stripe script here
-        this.addScripts('https://js.stripe.com/v3/')
-        this.addScripts('https://checkout.stripe.com/checkout.js')
+        AddScripts('https://js.stripe.com/v3/')
+        AddScripts('https://checkout.stripe.com/checkout.js')
 
 
         Network({ token: this.props.token })
@@ -61,66 +62,49 @@ class OrderIndex extends React.Component {
     }
 
 
-    addScripts(url) {
-        const script = document.createElement("script");
-        script.src = url;
-        script.async = true;
-        script.onload = () => this.scriptLoaded();
-
-        document.body.appendChild(script);
-    }
-
-    scriptLoaded() {
-        // TODO something here
-    }
-
-
-
     onPayingOut(order) {
         const cust = this.state.customer
         console.log('order: ', order)
-        const amount = order.total_amount.replace('.', '')
+        const pretotal = parseFloat(order.total_amount) + parseFloat(order.Shipping.shipping_cost)
+        const taxCalc = (order.Tax.tax_percentage / 100) * pretotal
+        let total = (pretotal + taxCalc).toFixed(2)
+        const amount = total.toString().replace('.', '')
         const itemNames = order.OrderDetails.map(item => item.product_name).join(', ')
 
 
         const self = this
-
-        const handler = window.StripeCheckout.configure({
-            key: "pk_test_A5ZorUy4vfuHCDtUVWJwMIUy",
-            image: "https://stripe.com/img/documentation/checkout/marketplace.png",
-            locale: "auto",
-            token: function(token) {
-              // You can access the token ID with `token.id`.
-              // Get the token ID to your server-side code for use.
-              console.log("receive", token)
-
-                Network({ token: self.props.token })
-                    .put('/api/orders', { 
-                        orderId: order.order_id,
-                        token: token.id,
-                        currency: 'usd',
-                        amount: amount,
-                        description: 'Paid $' + amount + ' for orders : ' + itemNames
-                    })
-
-                    .then(res => {
-                        if (res.data.status) {
-                            console.log('success')
-                        }
-                    })
-
-                    .catch(err => {
-                        console.log('error : ', err)
-                    })
-            }
-        })
-
-        handler.open({
+        Checkout({
             name: "Shopper Now",
             description: "You are about to pay your orders: " + itemNames,
             amount: amount,
             email: cust.email
+
+        // callback once process done
+        }, (token) => {
+
+            Network({ token: self.props.token })
+            .put('/api/orders', { 
+                orderId: order.order_id,
+                token: token.id,
+                currency: 'usd',
+                amount: total,
+                description: 'Paid $' + total + ' for orders : ' + itemNames
+            })
+
+            // success
+            .then(res => {
+                if (res.data.status) {
+                    console.log('success')
+                }
+            })
+
+            // fail
+            .catch(err => {
+                console.log('error : ', err)
+            })
+
         })
+
     }
 
 

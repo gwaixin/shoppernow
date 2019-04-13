@@ -1,7 +1,8 @@
 // cart/index
 import React from 'react'
 import { Container, Row, Col, Button, Card } from 'react-bootstrap'
-import { Network, ErrorHandler } from '../helpers'
+import { Network, ErrorHandler, AddScripts } from '../helpers'
+import { Checkout } from '../helpers/stripe'
 import { connect } from "react-redux"
 import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
 import Price from '../component/Price'
@@ -20,6 +21,8 @@ class Index extends React.Component {
 		cart: null,
 		total: 0,
 
+		customer: null,
+
 		// remove state properties
 		showConfirm: false,
 		removeId: '',
@@ -30,6 +33,10 @@ class Index extends React.Component {
 
 
 	componentDidMount() {
+		// prepare stripe script here
+		AddScripts('https://js.stripe.com/v3/')
+		AddScripts('https://checkout.stripe.com/checkout.js')
+
 		this.initCart()
 	}
 
@@ -44,7 +51,10 @@ class Index extends React.Component {
 	}
 
 	initCart() {
-		Network({params: { cart_id: this.props.cartId }})
+		Network({
+			token: this.props.token, 
+			params: { cart_id: this.props.cartId }
+		})
 			.get('/api/cart')
 			.then(res => {
 				if (res.data.status) {
@@ -53,7 +63,9 @@ class Index extends React.Component {
 					// calculate price
 					const total = this.calcTotal(cart)
 
-					this.setState({ cart, total })
+					const customer = res.data.customer
+
+					this.setState({ cart, total, customer })
 				} else {
 					let errors = ErrorHandler(res)
 
@@ -158,6 +170,9 @@ class Index extends React.Component {
 					// update cart
 					this.initCart()
 
+					// try to pay order
+					this.pay(res.data.order)
+
 
 				// otherwise handle error
 				} else {
@@ -169,6 +184,64 @@ class Index extends React.Component {
 				let errors = ErrorHandler(err)
 				ToastsStore.error("Failed to checkout! \n " + errors.join(', '))
 			}) 
+	}
+
+	pay(order) {
+
+		if (typeof order === 'undefined') {
+			return console.log('there is no order found')
+		}
+
+		if (!this.state.customer) {
+			return console.log('there should be a customer to continue order')
+		}
+
+		const cust = this.state.customer
+		console.log('order: ', order)
+		const pretotal = parseFloat(order.total_amount) + parseFloat(order.Shipping.shipping_cost)
+		const taxCalc = (order.Tax.tax_percentage / 100) * pretotal
+		let total = (pretotal + taxCalc).toFixed(2)
+		const amount = total.toString().replace('.', '')
+		const itemNames = order.OrderDetails.map(item => item.product_name).join(', ')
+
+		const self = this
+
+		Checkout({
+			name: "Shopper Now",
+			description: "You are about to pay your orders: " + itemNames,
+			amount: amount,
+			email: cust.email
+
+		// callback once paid done
+		}, (token) => {
+
+			Network({ token: self.props.token })
+			.put('/api/orders', { 
+				orderId: order.order_id,
+				token: token.id,
+				currency: 'usd',
+				amount: total,
+				description: 'Paid $' + total + ' for orders : ' + itemNames
+			})
+
+			// success
+			.then(res => {
+				if (res.data.status) {
+					console.log('success')
+				}
+			})
+
+			// fail
+			.catch(err => {
+				console.log('error : ', err)
+			})
+
+		// callback for closed stripe modal
+		}, () => {
+			setTimeout(() => {
+				this.props.history.push('/orders')
+			}, 1000)
+		})
 	}
 
 
@@ -186,9 +259,9 @@ class Index extends React.Component {
 				<Row>
 
 					<ToastsContainer 
-                            position={ToastsContainerPosition.TOP_CENTER}
-                            store={ToastsStore} 
-                            lightBackground />
+							position={ToastsContainerPosition.TOP_CENTER}
+							store={ToastsStore} 
+							lightBackground />
 
 					<CustomModal 
 						isShow={this.state.showConfirm}
